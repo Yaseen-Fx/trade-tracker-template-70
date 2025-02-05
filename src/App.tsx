@@ -29,7 +29,7 @@ function App() {
         <BrowserRouter>
           <div className="min-h-screen bg-gray-50">
             <Navigation />
-            <div className="container mx-auto px-4 py-8">
+            <div className="container mx-auto px-4 py-8 mt-16">
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/calendar" element={<Calendar />} />
