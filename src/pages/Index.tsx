@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TradeForm, { Trade } from '@/components/TradeForm';
 import TradeList from '@/components/TradeList';
 import Stats from '@/components/Stats';
@@ -6,8 +6,19 @@ import Stats from '@/components/Stats';
 const Index = () => {
   const [trades, setTrades] = useState<Trade[]>([]);
 
+  useEffect(() => {
+    // Load trades from localStorage on component mount
+    const savedTrades = localStorage.getItem('trades');
+    if (savedTrades) {
+      setTrades(JSON.parse(savedTrades));
+    }
+  }, []);
+
   const handleAddTrade = (trade: Trade) => {
-    setTrades([trade, ...trades]);
+    const updatedTrades = [trade, ...trades];
+    setTrades(updatedTrades);
+    // Save to localStorage
+    localStorage.setItem('trades', JSON.stringify(updatedTrades));
   };
 
   return (
