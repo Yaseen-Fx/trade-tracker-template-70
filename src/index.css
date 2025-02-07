@@ -99,3 +99,41 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Calendar custom styles */
+.calendar-container {
+  width: 100% !important;
+}
+
+.calendar-container .rdp-months {
+  width: 100%;
+}
+
+.calendar-container .rdp-month {
+  width: 100%;
+}
+
+.calendar-container .rdp-table {
+  width: 100%;
+}
+
+.calendar-container .rdp-cell {
+  height: auto;
+  aspect-ratio: 1;
+}
+
+/* Ensure calendar is responsive on mobile */
+@media (max-width: 640px) {
+  .calendar-container .rdp {
+    --rdp-cell-size: auto;
+    margin: 0;
+  }
+  
+  .calendar-container .rdp-month {
+    padding: 0;
+  }
+
+  .calendar-container .rdp-table {
+    margin: 0;
+  }
+}
