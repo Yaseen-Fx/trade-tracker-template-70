@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -120,6 +121,7 @@
 .calendar-container .rdp-cell {
   height: auto;
   aspect-ratio: 1;
+  padding: 4px;
 }
 
 /* Ensure calendar is responsive on mobile */
@@ -135,5 +137,9 @@
 
   .calendar-container .rdp-table {
     margin: 0;
+  }
+
+  .calendar-container .rdp-cell {
+    padding: 2px;
   }
 }

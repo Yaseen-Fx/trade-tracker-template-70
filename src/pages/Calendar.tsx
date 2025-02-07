@@ -23,10 +23,9 @@ const TradingCalendar = () => {
     const totalPnL = dayTrades.reduce((sum, trade) => sum + trade.pnl, 0);
     const tradesCount = dayTrades.length;
     
-    // Base styles for all days, including non-trading days
     return (
       <div 
-        className={`w-full h-full min-h-[80px] flex flex-col items-start justify-start p-1 rounded-md transition-colors
+        className={`w-full h-full min-h-[100px] flex flex-col items-start justify-start p-2 rounded-md transition-colors
           ${dayTrades.length > 0 
             ? totalPnL > 0 
               ? 'bg-green-100 dark:bg-green-900/30' 
@@ -34,12 +33,10 @@ const TradingCalendar = () => {
             : 'hover:bg-gray-50 dark:hover:bg-gray-800/30'
           }`}
       >
-        {/* Date number - always visible */}
-        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+        <span className="text-base font-medium text-gray-600 dark:text-gray-400">
           {format(day, 'd')}
         </span>
         
-        {/* Only show P&L and trade count if there are trades */}
         {dayTrades.length > 0 && (
           <>
             <span className={`text-sm font-semibold mt-auto truncate w-full ${
@@ -52,7 +49,7 @@ const TradingCalendar = () => {
                 maximumFractionDigits: 0
               })}
             </span>
-            <span className="text-[10px] text-gray-500 dark:text-gray-400">
+            <span className="text-xs text-gray-500 dark:text-gray-400">
               {tradesCount} {tradesCount === 1 ? 'trade' : 'trades'}
             </span>
           </>
@@ -62,16 +59,16 @@ const TradingCalendar = () => {
   };
 
   return (
-    <div className="p-2 sm:p-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6">
-        <h1 className="text-xl sm:text-2xl font-bold dark:text-white mb-2 sm:mb-0">
+    <div className="p-4 sm:p-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold dark:text-white mb-2 sm:mb-0">
           Trading Calendar
         </h1>
-        <div className="text-sm text-gray-500 dark:text-gray-400">
+        <div className="text-base text-gray-500 dark:text-gray-400">
           {format(date, 'MMMM yyyy')}
         </div>
       </div>
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2 sm:p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-4 sm:p-8">
         <Calendar
           mode="single"
           selected={date}
