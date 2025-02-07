@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Calendar } from "@/components/ui/calendar";
 import { addDays, format } from "date-fns";
@@ -26,23 +27,40 @@ const TradingCalendar = () => {
     const tradesCount = dayTrades.length;
     
     return (
-      <div className={`w-full h-full flex flex-col items-center justify-center p-1 ${
-        totalPnL > 0 ? 'bg-green-100' : totalPnL < 0 ? 'bg-red-100' : 'bg-gray-50'
-      }`}>
-        <span className={`text-xs font-semibold ${
-          totalPnL > 0 ? 'text-green-600' : totalPnL < 0 ? 'text-red-600' : 'text-gray-600'
-        }`}>
-          ${totalPnL.toLocaleString()}
+      <div 
+        className={`w-full h-full flex flex-col items-start justify-start p-1 rounded-md ${
+          totalPnL > 0 ? 'bg-green-100 dark:bg-green-900/30' : 
+          totalPnL < 0 ? 'bg-red-100 dark:bg-red-900/30' : 'bg-gray-50 dark:bg-gray-800/30'
+        }`}
+      >
+        <span className="text-xs text-gray-600 dark:text-gray-400 ml-1">
+          {format(day, 'd')}
         </span>
-        <span className="text-[10px] text-gray-500">{tradesCount} trades</span>
+        <span className={`text-sm font-semibold mt-1 ${
+          totalPnL > 0 ? 'text-green-600 dark:text-green-400' : 
+          totalPnL < 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400'
+        }`}>
+          ${Math.abs(totalPnL).toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+          })}
+        </span>
+        <span className="text-[10px] text-gray-500 dark:text-gray-400 mt-1">
+          {tradesCount} {tradesCount === 1 ? 'trade' : 'trades'}
+        </span>
       </div>
     );
   };
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Trading Calendar</h1>
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold dark:text-white">Trading Calendar</h1>
+        <div className="text-sm text-gray-500 dark:text-gray-400">
+          {format(date, 'MMMM yyyy')}
+        </div>
+      </div>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <Calendar
           mode="single"
           selected={date}
@@ -52,6 +70,7 @@ const TradingCalendar = () => {
             DayContent: ({ date }) => getDayContent(date)
           }}
           className="w-full"
+          showOutsideDays={true}
         />
       </div>
     </div>
