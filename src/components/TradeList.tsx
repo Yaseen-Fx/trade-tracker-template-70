@@ -1,7 +1,15 @@
 import React from 'react';
 import type { Trade } from './TradeForm';
+import { Button } from "@/components/ui/button";
+import { Pencil, Trash2 } from 'lucide-react';
 
-const TradeList = ({ trades }: { trades: Trade[] }) => {
+interface TradeListProps {
+  trades: Trade[];
+  onEdit: (trade: Trade) => void;
+  onDelete: (tradeId: string) => void;
+}
+
+const TradeList = ({ trades, onEdit, onDelete }: TradeListProps) => {
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm text-left">
@@ -15,6 +23,7 @@ const TradeList = ({ trades }: { trades: Trade[] }) => {
             <th className="px-6 py-3">TP</th>
             <th className="px-6 py-3">Outcome</th>
             <th className="px-6 py-3">P/L ($)</th>
+            <th className="px-6 py-3">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -24,7 +33,7 @@ const TradeList = ({ trades }: { trades: Trade[] }) => {
               <td className="px-6 py-4">{trade.instrument}</td>
               <td className="px-6 py-4">
                 <span className={`px-2 py-1 rounded ${
-                  trade.type === 'Long' ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'
+                  trade.type === 'Long' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                 }`}>
                   {trade.type}
                 </span>
@@ -34,19 +43,38 @@ const TradeList = ({ trades }: { trades: Trade[] }) => {
               <td className="px-6 py-4">{trade.takeProfit}</td>
               <td className="px-6 py-4">
                 <span className={`px-2 py-1 rounded ${
-                  trade.outcome === 'Win' ? 'bg-success/10 text-success' :
-                  trade.outcome === 'Loss' ? 'bg-danger/10 text-danger' :
+                  trade.outcome === 'Win' ? 'bg-green-100 text-green-800' :
+                  trade.outcome === 'Loss' ? 'bg-red-100 text-red-800' :
                   'bg-gray-100 text-gray-600'
                 }`}>
                   {trade.outcome}
                 </span>
               </td>
               <td className={`px-6 py-4 ${
-                trade.pnl > 0 ? 'text-success' :
-                trade.pnl < 0 ? 'text-danger' :
+                trade.pnl > 0 ? 'text-green-600' :
+                trade.pnl < 0 ? 'text-red-600' :
                 'text-gray-600'
               }`}>
                 {trade.pnl > 0 ? '+' : ''}{trade.pnl}
+              </td>
+              <td className="px-6 py-4">
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onEdit(trade)}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onDelete(trade.id)}
+                    className="text-red-600 hover:text-red-700"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               </td>
             </tr>
           ))}

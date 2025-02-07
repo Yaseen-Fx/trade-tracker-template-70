@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,9 +21,22 @@ export interface Trade {
   screenshot?: File;
 }
 
-const TradeForm = ({ onSubmit }: { onSubmit: (trade: Trade) => void }) => {
+interface TradeFormProps {
+  onSubmit: (trade: Trade) => void;
+  onUpdate?: (trade: Trade) => void;
+  initialData?: Trade;
+  isEditing?: boolean;
+}
+
+const TradeForm = ({ onSubmit, onUpdate, initialData, isEditing = false }: TradeFormProps) => {
   const { toast } = useToast();
   const [formData, setFormData] = useState<Partial<Trade>>({});
+
+  useEffect(() => {
+    if (initialData && isEditing) {
+      setFormData(initialData);
+    }
+  }, [initialData, isEditing]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,8 +50,14 @@ const TradeForm = ({ onSubmit }: { onSubmit: (trade: Trade) => void }) => {
       return;
     }
 
+    // Automatically handle negative values for losses
+    let adjustedPnL = formData.pnl || 0;
+    if (formData.outcome === 'Loss' && adjustedPnL > 0) {
+      adjustedPnL = -adjustedPnL;
+    }
+
     const trade: Trade = {
-      id: Date.now().toString(),
+      id: isEditing ? (formData.id || '') : Date.now().toString(),
       date: formData.date || '',
       instrument: formData.instrument || '',
       timeframe: formData.timeframe || '1H',
@@ -49,16 +68,27 @@ const TradeForm = ({ onSubmit }: { onSubmit: (trade: Trade) => void }) => {
       riskReward: formData.riskReward || '',
       positionSize: formData.positionSize || 0,
       outcome: formData.outcome as 'Win' | 'Loss' | 'Break-even',
-      pnl: formData.pnl || 0,
+      pnl: adjustedPnL,
       screenshot: formData.screenshot,
     };
 
-    onSubmit(trade);
-    setFormData({});
-    toast({
-      title: "Success",
-      description: "Trade added successfully",
-    });
+    if (isEditing && onUpdate) {
+      onUpdate(trade);
+      toast({
+        title: "Success",
+        description: "Trade updated successfully",
+      });
+    } else {
+      onSubmit(trade);
+      toast({
+        title: "Success",
+        description: "Trade added successfully",
+      });
+    }
+    
+    if (!isEditing) {
+      setFormData({});
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
