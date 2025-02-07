@@ -1,30 +1,7 @@
 import React from 'react';
 import { Calendar } from "@/components/ui/calendar";
-import { addDays } from "date-fns";
+import { addDays, format } from "date-fns";
 import type { Trade } from '@/components/TradeForm';
-
-interface CalendarDayProps {
-  date: Date;
-  trades: Trade[];
-}
-
-const CalendarDay = ({ date, trades }: CalendarDayProps) => {
-  const dayTrades = trades.filter(trade => 
-    new Date(trade.date).toDateString() === date.toDateString()
-  );
-  
-  if (dayTrades.length === 0) return null;
-  
-  const totalPnL = dayTrades.reduce((sum, trade) => sum + trade.pnl, 0);
-  
-  return (
-    <div className={`w-full h-full flex items-center justify-center ${
-      totalPnL > 0 ? 'text-success' : totalPnL < 0 ? 'text-danger' : 'text-muted'
-    }`}>
-      {totalPnL > 0 ? '+' : ''}{totalPnL.toFixed(2)}
-    </div>
-  );
-};
 
 const TradingCalendar = () => {
   const [date, setDate] = React.useState<Date>(new Date());
@@ -38,18 +15,29 @@ const TradingCalendar = () => {
     }
   }, []);
 
-  const footer = (
-    <div className="mt-4 space-y-2">
-      <div className="flex items-center gap-2">
-        <div className="w-3 h-3 rounded-full bg-success" />
-        <span className="text-sm">Profit</span>
+  const getDayContent = (day: Date) => {
+    const dayTrades = trades.filter(trade => 
+      new Date(trade.date).toDateString() === day.toDateString()
+    );
+    
+    if (dayTrades.length === 0) return null;
+    
+    const totalPnL = dayTrades.reduce((sum, trade) => sum + trade.pnl, 0);
+    const tradesCount = dayTrades.length;
+    
+    return (
+      <div className={`w-full h-full flex flex-col items-center justify-center p-1 ${
+        totalPnL > 0 ? 'bg-green-100' : totalPnL < 0 ? 'bg-red-100' : 'bg-gray-50'
+      }`}>
+        <span className={`text-xs font-semibold ${
+          totalPnL > 0 ? 'text-green-600' : totalPnL < 0 ? 'text-red-600' : 'text-gray-600'
+        }`}>
+          ${totalPnL.toLocaleString()}
+        </span>
+        <span className="text-[10px] text-gray-500">{tradesCount} trades</span>
       </div>
-      <div className="flex items-center gap-2">
-        <div className="w-3 h-3 rounded-full bg-danger" />
-        <span className="text-sm">Loss</span>
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="p-6">
@@ -60,14 +48,10 @@ const TradingCalendar = () => {
           selected={date}
           onSelect={(newDate) => setDate(newDate || new Date())}
           disabled={{ after: addDays(new Date(), 0) }}
-          modifiers={{ hasEntry: (date) => trades.some(trade => new Date(trade.date).toDateString() === date.toDateString()) }}
-          modifiersStyles={{
-            hasEntry: { fontWeight: 'bold' }
-          }}
           components={{
-            DayContent: ({ date }) => <CalendarDay date={date} trades={trades} />
+            DayContent: ({ date }) => getDayContent(date)
           }}
-          footer={footer}
+          className="w-full"
         />
       </div>
     </div>
