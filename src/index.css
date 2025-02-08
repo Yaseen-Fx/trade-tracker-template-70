@@ -116,15 +116,17 @@
 
 .calendar-container .rdp-table {
   width: 100%;
+  border-collapse: separate;
+  border-spacing: 8px;
 }
 
 .calendar-container .rdp-cell {
   height: auto;
   aspect-ratio: 1;
-  padding: 4px;
+  padding: 0;
 }
 
-/* Ensure calendar is responsive on mobile */
+/* Enhanced mobile responsiveness */
 @media (max-width: 640px) {
   .calendar-container {
     overflow-x: auto;
@@ -138,16 +140,15 @@
   
   .calendar-container .rdp-month {
     padding: 0;
-    min-width: max-content;
   }
 
   .calendar-container .rdp-table {
-    margin: 0;
+    border-spacing: 4px;
   }
 
   .calendar-container .rdp-cell {
-    padding: 2px;
-    min-width: 100px;
+    min-width: 120px;
+    min-height: 150px;
   }
   
   .calendar-container .rdp-day {
