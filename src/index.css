@@ -126,6 +126,11 @@
 
 /* Ensure calendar is responsive on mobile */
 @media (max-width: 640px) {
+  .calendar-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
   .calendar-container .rdp {
     --rdp-cell-size: auto;
     margin: 0;
@@ -133,6 +138,7 @@
   
   .calendar-container .rdp-month {
     padding: 0;
+    min-width: max-content;
   }
 
   .calendar-container .rdp-table {
@@ -141,5 +147,21 @@
 
   .calendar-container .rdp-cell {
     padding: 2px;
+    min-width: 100px;
   }
+  
+  .calendar-container .rdp-day {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* Smooth transitions for hover effects */
+.calendar-container .rdp-cell > div {
+  transition: all 0.2s ease-in-out;
+}
+
+.calendar-container .rdp-cell > div:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
