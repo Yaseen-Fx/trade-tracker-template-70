@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -107,6 +108,7 @@
 
 .calendar-container .rdp {
   width: 100%;
+  margin: 0;
 }
 
 .calendar-container .rdp-months {
@@ -120,18 +122,27 @@
 .calendar-container .rdp-table {
   width: 100%;
   border-collapse: separate;
-  border-spacing: 2px;
+  border-spacing: 4px;
 }
 
 .calendar-container .rdp-cell {
   padding: 0;
   height: auto;
+  width: calc(100% / 7);
 }
 
 .calendar-container .rdp-day {
   width: 100%;
   height: 100%;
   aspect-ratio: unset;
+}
+
+.calendar-container .rdp-day_selected {
+  background: none;
+}
+
+.calendar-container .rdp-day:hover {
+  background: none;
 }
 
 /* Mobile Responsiveness */
@@ -147,20 +158,19 @@
   }
 
   .calendar-container .rdp-cell {
-    min-width: 140px;
+    min-width: 160px;
   }
 
   .calendar-container .rdp-table {
-    border-spacing: 1px;
+    border-spacing: 2px;
   }
 }
 
-/* Smooth transitions for hover effects */
+/* Smooth transitions */
 .calendar-container .rdp-cell > div {
-  transition: all 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out;
 }
 
 .calendar-container .rdp-cell > div:hover {
-  transform: scale(1.02);
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  transform: translateY(-2px);
 }
